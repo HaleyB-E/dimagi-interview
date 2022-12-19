@@ -12,10 +12,13 @@ function Form() {
   const usersContext = useContext(UsersContext) as IUsersContextType;
 
   const onSubmit = async (ev: React.MouseEvent<HTMLButtonElement>) => {
-    // TODO: we won't have time today, but this should handle validation
-    // at basic, make sure email is a real email and all fields are filled out
-    //    should also check location only has letters in it
+    // TODO: we won't have time today, but this should handle more robust validation
+    // at basic, make sure email is a real email and location only has letters in it
     // more advanced: check email is a real user
+    if (!email || !location) {
+      setHasLocationError(true)
+      return;
+    }
     const dataToSave: ILocationFormData = {
       email,
       location,
@@ -47,7 +50,7 @@ function Form() {
         }
       </form>
       {hasLocationError && <div className='error'>
-        No location found with that name - please try again
+        Invalid submission (missing data or invalid location) - please try again
       </div>}
       {results && <div className='success'>
         Thank you for submitting your location to Dimagi!
