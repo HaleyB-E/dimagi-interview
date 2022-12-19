@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
+import { ILocationFormData } from '../entities';
+import { saveNewLocationForUser } from '../services/FakeBackend.ts';
 
 interface IFormState {
   email: string
   location: string
 }
 
-interface IFormProps {
-
-}
+interface IFormProps {}
 
 class Form extends Component<IFormProps, IFormState> {
   constructor(props: IFormProps) {
@@ -24,9 +24,16 @@ class Form extends Component<IFormProps, IFormState> {
   }
 
   onSubmit = (ev: React.MouseEvent<HTMLButtonElement>) => {
-    const currentTime = new Date();
-    console.log('Sending value to dimagi: ')
-    console.log(`[${this.state.email}, ${currentTime}, ${this.state.location}]`)
+    // TODO: we won't have time today, but this should handle validation
+    // at basic, make sure email is a real email and all fields are filled out
+    // more advanced: check email is a real user
+    const dataToSave: ILocationFormData = {
+      ...this.state,
+      submitDate: new Date()
+    };
+    console.log('Sending value to dimagi: ');
+    console.log(dataToSave);
+    saveNewLocationForUser(dataToSave);
   }
   
   render() {
