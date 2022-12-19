@@ -44,10 +44,6 @@ function App() {
             <Route path='/list' element={<List/>}/>
           </Routes>
         </Router>
-        <div>
-          TESTING
-          {usersList.map(x => (<div key={x.email}> {x.bestGuessLatitude} </div>))}
-        </div>
       </UsersContext.Provider>
     </div>
   );

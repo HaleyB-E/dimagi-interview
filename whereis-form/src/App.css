@@ -8,6 +8,23 @@
   font-size: calc(10px + 2vmin);
 }
 
+.results-table {
+  border: 1px solid;
+  border-collapse: collapse;
+  margin: 10px;
+  padding: 5px;
+  font-size: 20px;
+}
+
+th {
+  border: 1px solid;
+  padding: 5px;
+}
+td {
+  border: 1px solid;
+  padding: 5px;
+}
+
 .error {
   color: red;
   background-color: pink;
@@ -30,9 +47,4 @@
   border-color: green;
   border-width: 1px;
   border-style: solid;
-}
-
-
-.App-link {
-  color: #61dafb;
 }

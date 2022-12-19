@@ -2,6 +2,8 @@ import React from 'react';
 import { IUserLocationData } from '../entities';
 
 function List() {
+  // TODO: this is using fake data because I couldn't get context to work properly
+  //    ultimately, this should just display the UsersList values from the base app
   const fakeData: IUserLocationData[] = [
     {
       email:'nick@dimagi.com',
@@ -18,19 +20,22 @@ function List() {
   ]
 
   return (
-    <div className="App">
-      <table>
-        <tr>
-          <th>Submit Date/Time</th>
-          <th>Email</th>
-          <th>Best Guess Latitude</th>
-          <th>Best Guess Longitude</th>
-        </tr>
+    <div className="app">
+      <h2>Current Locations</h2>
+      <table className='results-table'>
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Submit Date/Time</th>
+            <th>Best Guess Latitude</th>
+            <th>Best Guess Longitude</th>
+          </tr>
+        </thead>
         <tbody>
           {fakeData.map(entry => {
-            return <tr>
-              <td>{entry.submitDate.toDateString()}</td>
+            return <tr key={entry.email}>
               <td>{entry.email}</td>
+              <td>{entry.submitDate.toDateString()}</td>
               <td>{entry.bestGuessLatitude}</td>
               <td>{entry.bestGuessLongitude}</td>
             </tr>
