@@ -14,6 +14,7 @@ function Form() {
   const onSubmit = async (ev: React.MouseEvent<HTMLButtonElement>) => {
     // TODO: we won't have time today, but this should handle validation
     // at basic, make sure email is a real email and all fields are filled out
+    //    should also check location only has letters in it
     // more advanced: check email is a real user
     const dataToSave: ILocationFormData = {
       email,
