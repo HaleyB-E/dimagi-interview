@@ -4,7 +4,7 @@ import '../App.css';
 class Homepage extends Component {
   render() {
     return (
-      <div className="App">
+      <div className='app'>
         <header className="">
           Welcome to dimagi whereis!
         </header>

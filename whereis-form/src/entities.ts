@@ -16,3 +16,8 @@ export interface IUserLocationData {
   bestGuessLatitude: string;
   bestGuessLongitude: string;
 }
+
+export interface IUsersContextType {
+  usersList: IUserLocationData[];
+  upsertUserLocation: (locData: IUserLocationData) => void;
+}

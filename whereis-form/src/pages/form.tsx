@@ -1,61 +1,60 @@
-import React, { Component } from 'react';
-import { ILocationFormData } from '../entities';
+import React, { useContext, useState } from 'react';
+import { UsersContext } from '../App.tsx';
+import { IUsersContextType } from '../entities';
+import { ILocationFormData, IUserLocationData } from '../entities.ts';
 import { saveNewLocationForUser } from '../services/FakeBackend.ts';
 
-interface IFormState {
-  email: string
-  location: string
-}
+function Form() {
+  const [email, setEmail] = useState<string>('');
+  const [location, setLocation] = useState<string>('');
+  const [results, setResults] = useState<IUserLocationData | undefined>();
+  const [hasLocationError, setHasLocationError] = useState<boolean>(false);
+  const usersContext = useContext(UsersContext) as IUsersContextType;
 
-interface IFormProps {}
-
-class Form extends Component<IFormProps, IFormState> {
-  constructor(props: IFormProps) {
-    super(props)
-    this.state={email: '', location: ''}
-  }
-
-  updateEmail = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({email: ev.target.value})
-  }
-
-  updateLocation = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({location: ev.target.value})
-  }
-
-  onSubmit = (ev: React.MouseEvent<HTMLButtonElement>) => {
+  const onSubmit = async (ev: React.MouseEvent<HTMLButtonElement>) => {
     // TODO: we won't have time today, but this should handle validation
     // at basic, make sure email is a real email and all fields are filled out
     // more advanced: check email is a real user
     const dataToSave: ILocationFormData = {
-      ...this.state,
+      email,
+      location,
       submitDate: new Date()
     };
-    console.log('Sending value to dimagi: ');
-    console.log(dataToSave);
-    saveNewLocationForUser(dataToSave);
+    const locationDataWithLatLong = await saveNewLocationForUser(dataToSave);
+    if (locationDataWithLatLong) {
+      setResults(locationDataWithLatLong)
+      setHasLocationError(false)
+      usersContext.upsertUserLocation(locationDataWithLatLong)
+    } else {
+      setHasLocationError(true)
+    }
   }
-  
-  render() {
-    return (
-      <div className="App">
-        <form>
-          <div>
-            <label htmlFor='email'>Email: </label>
-            <input name='email' type='email' value={this.state.email} onChange={this.updateEmail}/>
-          </div>
-          <div>
-            <label htmlFor='location'>Location: </label>
-            <input name='location' type='text' value={this.state.location} onChange={this.updateLocation}/>
-          </div>
-          <button type='button' onClick={this.onSubmit}>Submit</button>
-        </form>
 
-        <br/>
-        <a href='/'>Return home</a>
-      </div>
-    )
-  }
+  return (
+    <div className='app'>
+      <form>
+        <div>
+          <label htmlFor='email'>Email: </label>
+          <input name='email' type='email' value={email} onChange={(ev) => setEmail(ev.target.value)} disabled={!!results}/>
+        </div>
+        <div>
+          <label htmlFor='location'>Location: </label>
+          <input name='location' type='text' value={location} onChange={(ev) => setLocation(ev.target.value)} disabled={!!results}/>
+        </div>
+        {!results && 
+          <button type='button' onClick={onSubmit}>Submit</button>
+        }
+      </form>
+      {hasLocationError && <div className='error'>
+        No location found with that name - please try again
+      </div>}
+      {results && <div className='success'>
+        Thank you for submitting your location to Dimagi!
+      </div>}
+      <br/>
+      <a href='/'>Return home</a>
+    </div>
+  )
 }
 
 export default Form;
